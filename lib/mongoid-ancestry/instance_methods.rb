@@ -230,10 +230,11 @@ module Mongoid
     private
 
     def cast_primary_key(key)
+      mklass = defined?(Moped::BSON) ? Moped::BSON::ObjectId : BSON::ObjectId
       if primary_key_type == Integer
         key.to_i
-      elsif primary_key_type == Moped::BSON::ObjectId && key =~ /[a-z0-9]{24}/
-        Moped::BSON::ObjectId.from_string(key)
+      elsif primary_key_type == mklass && key =~ /[a-z0-9]{24}/
+        mklass.from_string(key)
       else
         key
       end
